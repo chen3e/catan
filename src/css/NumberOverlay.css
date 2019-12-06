@@ -1,0 +1,37 @@
+#numberOverlay {
+  position: relative;
+  top: -1960px;
+  pointer-events: none;
+}
+
+#topNumberRow, #bottomNumberRow {
+  margin-left: 233px;
+}
+
+#upperNumberRow, #lowerNumberRow {
+  margin-left: 147px;
+}
+
+#middleNumberRow {
+  margin-left: 61px;
+}
+
+.numberRow {
+  height: 147.5px;
+}
+
+.hexNumber {
+  position: relative;
+  display: inline-block;
+  height: 45px;
+  width: 45px;
+  border-radius: 22.5px;
+  background-color: gray;
+  margin-right: 126px;
+  z-index: 1;
+  text-align: center;
+  line-height: 45px;
+  font-size: 26px;
+  /* padding-top: 5px; */
+  /* margin-bottom: 100px; */
+}

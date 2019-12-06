@@ -1,0 +1,273 @@
+#gridComponent{
+  width: 80%;
+  max-height: 1000px;
+  margin: auto;
+  margin-top: 50px;
+}
+
+.hexagon {
+  position: relative;
+  width: 150px; 
+  height: 86.60px;
+  margin: 28px 10px;
+  /* background-image: url(http://csshexagon.com/img/meow.jpg); */
+  background-size: auto 173.2051px;
+  background-position: center;
+  /* z-index: 1; */
+}
+
+.brick {
+  background-image: url("../static/images/bricks.jpg");
+}
+
+.lumber {
+  background-image: url("../static/images/lumber.jpg");
+}
+
+.wheat {
+  background-image: url("../static/images/wheat.jpg");
+}
+
+.ore {
+  background-image: url("../static/images/ore.jpg");
+}
+
+.sheep {
+  background-image: url("../static/images/sheep.jpg");
+}
+
+.desert {
+  background-image: url("../static/images/desert.jpg");
+}
+
+.hexTop,
+.hexBottom {
+  position: absolute;
+  /* z-index: 1; */
+  width: 106.07px;
+  height: 106.07px;
+  overflow: hidden;
+  -webkit-transform: scaleY(0.5774) rotate(-45deg);
+  -ms-transform: scaleY(0.5774) rotate(-45deg);
+  transform: scaleY(0.5774) rotate(-45deg);
+  background: inherit;
+  left: 21.97px;
+}
+
+/*counter transform the bg image on the caps*/
+.hexTop:after,
+.hexBottom:after {
+  content: "";
+  position: absolute;
+  width: 150.0000px;
+  height: 86.60254037844388px;
+  -webkit-transform:  rotate(45deg) scaleY(1.7321) translateY(-43.3013px);
+  -ms-transform:      rotate(45deg) scaleY(1.7321) translateY(-43.3013px);
+  transform:          rotate(45deg) scaleY(1.7321) translateY(-43.3013px);
+  -webkit-transform-origin: 0 0;
+  -ms-transform-origin: 0 0;
+  transform-origin: 0 0;
+  background: inherit;
+}
+
+.hexTop {
+  top: -53.0330px;
+}
+
+.hexTop:after {
+  background-position: center top;
+}
+
+.hexBottom {
+  bottom: -53.0330px;
+}
+
+.hexBottom:after {
+  background-position: center bottom;
+}
+
+.hexagon:after {
+  content: "";
+  position: absolute;
+  top: 0.0000px;
+  left: 0;
+  width: 150.0000px;
+  height: 86.6025px;
+
+  background: inherit;
+}
+
+.hexRow > *, .pathRow > * {
+  display: inline-block;
+}
+
+#topHexRow, #bottomHexRow {
+  margin-left: 172px;
+}
+
+#upperHexRow, #lowerHexRow {
+  margin-left: 86px;
+}
+
+#pathOverlay {
+  position: relative;
+  top: -748px;
+
+}
+
+#topPathRow, #bottomPathRow {
+  height: 43px;
+  margin-left: 204px;
+}
+
+#topVertRow, #bottomVertRow {
+  margin-left: 162px;
+}
+
+#upperTiltRow, #lowerTiltRow {
+  margin-left: 118px;
+}
+
+#upperVertRow, #lowerVertRow {
+  margin-left: 76px;
+}
+
+#upperMiddleTiltRow, #lowerMiddleTiltRow {
+  margin-left: 32px;
+}
+
+#middleVertRow {
+  margin-left: -10px;
+}
+
+.tiltRow {
+  height: 60.5px;
+}
+
+.vertRow {
+  height: 86px;
+}
+
+.tiltUp, .tiltDown {
+  position: relative;
+  width: 20px;
+  height: 86px;
+  margin-right: 65px;
+  margin-top: -12px;
+  z-index: 1;
+}
+
+.vertical {
+  position: relative;
+  background-color: red;
+  width: 20px;
+  height: 86px;
+  margin-right: 150px;
+  margin-top: 0;
+  z-index: 1;
+}
+
+#topPathRow > * {
+  margin-top: -30px;
+}
+
+#bottomPathRow > * {
+  margin-top: -13px;
+}
+
+.tiltUp {
+  background-color: blue;
+  transform: rotate(60deg);
+}
+
+.tiltDown {
+  background-color: green;
+  transform: rotate(120deg);
+}
+
+#vertexOverlay {
+  position: relative;
+  top: -1530px;
+  height: 500px;
+}
+
+#topVertexRow, #bottomVertexRow {
+  margin-left: 159.5px;
+}
+
+#upperVertexRow, #lowerVertexRow {
+  margin-left: 73px;
+}
+
+#upperMiddleVertexRow, #lowerMiddleVertexRow {
+  margin-left: -12px;
+}
+
+.vertexRow {
+  height: 147px;
+}
+
+.vertex {
+  position: relative;
+  display: inline-block;
+  height: 25px;
+  width: 25px;
+  border-radius: 12.5px;
+  background-color: black;
+  margin-right: 60px;
+  z-index: 2;
+}
+
+#topVertexRow > *:nth-of-type(odd), #upperVertexRow > *:nth-of-type(odd), #upperMiddleVertexRow > *:nth-of-type(odd) {
+  top: 45px;
+  /* background-color: black; */
+}
+
+#bottomVertexRow > *:nth-of-type(even), #lowerVertexRow > *:nth-of-type(even), #lowerMiddleVertexRow > *:nth-of-type(even) {
+  top: 45px;
+  /* background-color: black; */
+}
+
+#numberOverlay {
+  position: relative;
+  top: -1942px;
+}
+
+#topNumberRow, #bottomNumberRow {
+  margin-left: 233px;
+}
+
+#upperNumberRow, #lowerNumberRow {
+  margin-left: 147px;
+}
+
+#middleNumberRow {
+  margin-left: 61px;
+}
+
+.numberRow {
+  height: 147.5px;
+}
+
+.hexNumber {
+  position: relative;
+  display: inline-block;
+  height: 45px;
+  width: 45px;
+  border-radius: 22.5px;
+  background-color: gray;
+  margin-right: 126px;
+  opacity: 1;
+  z-index: 1;
+  text-align: center;
+  line-height: 45px;
+  font-size: 26px;
+  /* padding-top: 5px; */
+  /* margin-bottom: 100px; */
+}
+
+
+
+.selected {
+  opacity: 0.1;
+}

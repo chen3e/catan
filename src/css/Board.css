@@ -1,0 +1,12 @@
+#boardComponent {
+  /* width: 80%; */
+  padding-left: 7.5%;
+  max-height: 1000px;
+  margin: auto;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+#overlays {
+  width: 80%;
+}

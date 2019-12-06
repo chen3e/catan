@@ -1,0 +1,204 @@
+#gridComponent{
+  width: 80%;
+  margin: auto;
+  margin-top: 50px;
+}
+
+.hexagon {
+  position: relative;
+  width: 100px;
+  height: 57.74px;
+  margin: 18px 7px;
+  background-image: url(https://csshexagon.com/img/meow.jpg);
+  background-size: auto 115.4701px;
+  background-position: center;
+}
+
+.hexTop,
+.hexBottom {
+  position: absolute;
+  z-index: 1;
+  width: 70.71px;
+  height: 70.71px;
+  overflow: hidden;
+  -webkit-transform: scaleY(0.5774) rotate(-45deg);
+  -ms-transform: scaleY(0.5774) rotate(-45deg);
+  transform: scaleY(0.5774) rotate(-45deg);
+  background: inherit;
+  left: 14.64px;
+}
+
+/*counter transform the bg image on the caps*/
+.hexTop:after,
+.hexBottom:after {
+  content: "";
+  position: absolute;
+  width: 100.0000px;
+  height: 57.73502691896258px;
+  -webkit-transform:  rotate(45deg) scaleY(1.7321) translateY(-28.8675px);
+  -ms-transform:      rotate(45deg) scaleY(1.7321) translateY(-28.8675px);
+  transform:          rotate(45deg) scaleY(1.7321) translateY(-28.8675px);
+  -webkit-transform-origin: 0 0;
+  -ms-transform-origin: 0 0;
+  transform-origin: 0 0;
+  background: inherit;
+}
+
+.hexTop {
+  top: -35.3553px;
+}
+
+.hexTop:after {
+  background-position: center top;
+}
+
+.hexBottom {
+  bottom: -35.3553px;
+}
+
+.hexBottom:after {
+  background-position: center bottom;
+}
+
+.hexagon:after {
+  content: "";
+  position: absolute;
+  top: 0.0000px;
+  left: 0;
+  width: 100.0000px;
+  height: 57.7350px;
+  z-index: 2;
+  background: inherit;
+}
+
+.hexRow > *, .pathRow > * {
+  display: inline-block;
+}
+
+#top, #bottom {
+  margin-left: 114px;
+}
+
+#upper, #lower {
+  margin-left: 57px;
+}
+
+#pathOverlay {
+  position: relative;
+  top: -502px;
+}
+
+#topPathRow, #bottomPathRow {
+  height: 28px;
+  margin-left: 134px;
+}
+
+#topVertRow, #bottomVertRow {
+  margin-left: 107px;
+}
+
+#upperTiltRow, #lowerTiltRow {
+  margin-left: 79px;
+}
+
+#upperVertRow, #lowerVertRow {
+  margin-left: 50px;
+}
+
+#upperMiddleTiltRow, #lowerMiddleTiltRow {
+  margin-left: 22px;
+}
+
+#middleVertRow {
+  margin-left: -7px;
+}
+
+.tiltRow {
+  height: 40.5px;
+}
+
+.tiltRow > * {
+  margin-top: 30px;
+}
+
+.vertRow {
+  height: 57.74px;
+}
+
+.tiltUp, .tiltDown {
+  position: relative;
+  width: 14px;
+  height: 57.73px;
+  margin-right: 43px;
+  margin-top: -8px;
+}
+
+.vertical {
+  background-color: red;
+  width: 14px;
+  height: 57.73px;
+  margin-right: 100px;
+}
+
+#topPathRow > * {
+  margin-top: -20px;
+}
+
+#bottomPathRow > * {
+  margin-top: -9px;
+}
+
+.tiltUp {
+  background-color: blue;
+  transform: rotate(60deg);
+}
+
+.tiltDown {
+  background-color: green;
+  transform: rotate(120deg);
+}
+
+#vertexOverlay {
+  /* background-color: pink;
+  opacity: 0.3; */
+  position: relative;
+  top: -995px;
+  height: 500px;
+}
+
+#topVertexRow, #bottomVertexRow {
+  margin-left: 105px;
+}
+
+#upperVertexRow, #lowerVertexRow {
+  margin-left: 48px;
+}
+
+#upperMiddleVertexRow, #lowerMiddleVertexRow {
+  margin-left: -9px;
+}
+
+.vertexRow {
+  height: 98px;
+}
+
+.vertex {
+  position: relative;
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+  border-radius: 10px;
+  background-color: black;
+  margin-right: 36.77px;
+  z-index: 10;
+}
+
+#topVertexRow > *:nth-of-type(even), #upperVertexRow > *:nth-of-type(even), #upperMiddleVertexRow > *:nth-of-type(even) {
+  top: -30px;
+  background-color: greenyellow;
+}
+
+#bottomVertexRow > *:nth-of-type(odd), #lowerVertexRow > *:nth-of-type(odd), #lowerMiddleVertexRow > *:nth-of-type(odd) {
+  top: -30px;
+  background-color: greenyellow;
+}

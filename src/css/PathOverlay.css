@@ -1,0 +1,93 @@
+#pathOverlay {
+  position: relative;
+  top: -758.25px;
+  pointer-events: none;
+}
+
+#topPathRow, #bottomPathRow {
+  height: 43px;
+  margin-left: 204px;
+}
+
+#topVertRow, #bottomVertRow {
+  margin-left: 162px;
+}
+
+#upperTiltRow, #lowerTiltRow {
+  margin-left: 118px;
+}
+
+#upperVertRow, #lowerVertRow {
+  margin-left: 76px;
+}
+
+#upperMiddleTiltRow, #lowerMiddleTiltRow {
+  margin-left: 32px;
+}
+
+#middleVertRow {
+  margin-left: -10px;
+}
+
+.tiltRow {
+  height: 61.5px;
+}
+
+.vertRow {
+  height: 87px;
+}
+
+.tiltUp, .tiltDown {
+  position: relative;
+  background-color: rgb(128, 127, 127, 0.5);
+  width: 20px;
+  height: 86px;
+  margin-right: 65px;
+  margin-top: -12px;
+  z-index: 1;
+  pointer-events: auto;
+}
+
+.vertical {
+  position: relative;
+  background-color: rgb(128, 127, 127, 0.5);
+  width: 20px;
+  height: 86px;
+  margin-right: 150px;
+  margin-top: 0;
+  z-index: 1;
+  pointer-events: auto;
+}
+
+#topPathRow > * {
+  margin-top: -30px;
+}
+
+#bottomPathRow > * {
+  margin-top: -13px;
+}
+
+.tiltUp {
+  transform: rotate(60deg);
+}
+
+.tiltDown {
+  transform: rotate(120deg);
+}
+
+
+.player1 {
+  background-color: green;
+}
+
+.player2 {
+  background-color: red;
+}
+
+.player3 {
+  background-color: blue;
+}
+
+.player4 {
+  background-color: yellow;
+}

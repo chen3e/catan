@@ -1,0 +1,33 @@
+
+#playerTab {
+  float: right;
+  width: 20%;
+  /* min-width: */
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 2.5px;
+}
+
+#rollDice {
+  background: url("../static/images/dice.jpg") center/cover;
+  /* background-size: cover; */
+  width: 40%;
+  margin: auto;
+  min-height: 50px;
+  /* min-width: 75px; */
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  border-radius: 7.5px;
+  box-shadow: 0 3px #999;
+  outline: none;
+  cursor: pointer;
+}
+
+#rollDice:active {
+  box-shadow: 0 1px #666;
+  transform: translateY(2px);
+}
+
+.robber {
+  color: gray;
+}

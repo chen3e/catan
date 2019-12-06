@@ -1,0 +1,69 @@
+#vertexOverlay {
+  position: relative;
+  top: -1550px;
+  height: 500px;
+  pointer-events: none;
+}
+
+#topVertexRow, #bottomVertexRow {
+  margin-left: 159.5px;
+}
+
+#upperVertexRow, #lowerVertexRow {
+  margin-left: 73px;
+}
+
+#upperMiddleVertexRow, #lowerMiddleVertexRow {
+  margin-left: -12px;
+}
+
+.vertexRow {
+  height: 149px;
+}
+
+.vertex {
+  position: relative;
+  display: inline-block;
+  height: 25px;
+  width: 25px;
+  border-radius: 12.5px;
+  background-color: rgb(128, 127, 127);
+  margin-right: 60px;
+  z-index: 2;
+  pointer-events: auto;
+}
+
+#topVertexRow > *:nth-of-type(odd), #upperVertexRow > *:nth-of-type(odd), #upperMiddleVertexRow > *:nth-of-type(odd) {
+  top: 48px;
+  /* background-color: black; */
+}
+
+#bottomVertexRow > *:nth-of-type(even), #lowerVertexRow > *:nth-of-type(even), #lowerMiddleVertexRow > *:nth-of-type(even) {
+  top: 48px;
+  /* background-color: black; */
+}
+
+
+.player1 {
+  background-color: green;
+}
+
+.player2 {
+  background-color: red;
+}
+
+.player3 {
+  background-color: blue;
+}
+
+.player4 {
+  background-color: yellow;
+}
+
+.city {
+  border: 2px solid black;
+}
+
+.port {
+
+}
