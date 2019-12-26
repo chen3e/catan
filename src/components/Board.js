@@ -6,10 +6,10 @@ import { PlayerModal } from '../components/PlayerModal';
 import { RobModal } from '../components/RobModal';
 import { HelpModal } from '../components/HelpModal';
 import { PlayerTab } from './PlayerTab';
-import { HexOverlay } from '../components/HexOverlay';
-import { PathOverlay } from '../components/PathOverlay';
-import { VertexOverlay } from '../components/VertexOverlay';
-import { NumberOverlay } from '../components/NumberOverlay';
+import HexOverlay from './HexOverlay';
+import PathOverlay from './PathOverlay';
+import VertexOverlay from './VertexOverlay';
+import NumberOverlay from './NumberOverlay';
 import { RobLargeHandsModal } from '../components/RobLargeHandsModal';
 import { TradeBankModal } from '../components/TradeBankModal';
 
@@ -62,7 +62,7 @@ const Board = () => {
     player2.wheat = 6;
     setPlayers([player1, player2]); //////
     setWhoseTurn(player1); //////
-  }, [])
+  }, [hexes, paths, vertexes])
 
   const addPlayers = (e) => {
     if (playerName.length) {
