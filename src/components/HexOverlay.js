@@ -1,35 +1,50 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React from 'react'
 import '../css/HexOverlay.css'
 
-const HexOverlay = (props) => {
-  const numbers = [[0, 1, 2], [3, 4, 5, 6], [7, 8, 9, 10, 11], [12, 13, 14, 15], [16, 17, 18]];
-  const rowIDs = [
-    "topHexRow",
-    "upperHexRow",
-    "middleHexRow",
-    "lowerHexRow",
-    "bottomHexRow"
-  ];
+const HexOverlay = ({ clickHex }) => {
+  const topHexRow = {
+    id: "topHexRow",
+    numbers: [0, 1, 2],
+  }
+  const upperHexRow = {
+    id: "upperHexRow",
+    numbers: [3, 4, 5, 6],
+  }
+  const middleHexRow = {
+    id: "middleHexRow",
+    numbers: [7, 8, 9, 10, 11],
+  }
+  const lowerHexRow = {
+    id: "lowerHexRow",
+    numbers: [12, 13, 14, 15],
+  }
+  const bottomHexRow = {
+    id: "bottomHexRow",
+    numbers: [16, 17, 18],
+  }
+
+  const rowData = [
+    topHexRow,
+    upperHexRow,
+    middleHexRow,
+    lowerHexRow,
+    bottomHexRow,
+  ]
+
   return (
     <div id="hexOverlay">
-      {
-        rowIDs.map(function(x, index) {
-          return (
-            <div id={x} className="hexRow">
-              {
-                numbers[index].map(y =>
-                  <div onClick={props.clickHex} id={"hex"+y} className="hexagon">
-                    <div className="hexTop"></div>
-                    <div className="hexBottom"></div>
-                  </div>
-                )
-              }
+      {rowData.map(({ id, numbers }) => (
+        <div id={id} className="hexRow">
+          {numbers.map(num =>
+            <div onClick={clickHex} id={`hex${num}`} className="hexagon">
+              <div className="hexTop" />
+              <div className="hexBottom" />
             </div>
-          )
-        })
-      }
+          )}
+        </div>
+      ))}
     </div>
   )
 }
 
-export { HexOverlay }
+export default HexOverlay
