@@ -19,6 +19,7 @@ const DevelopmentCardsModal = (props) => {
     return dict[css]
   }
 
+  // Playing a development card will remove it from the player's purchased_cards and add it to played_cards; hide the development card modal and trigger appropriate effects
   const playCard = (e) => {
     let card = CSSClassCard(e.target.className.replace('developmentCard ', ''));
     for (let i = 0; i < props.whoseTurn.purchased_cards.length; i++) {

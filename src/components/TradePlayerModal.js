@@ -11,11 +11,8 @@ const TradePlayerModal = (props) => {
   const [currentPlayerOffer, setCurrentPlayerOffer] = useState({'wheat': 0, 'lumber': 0, 'brick': 0, 'ore': 0, 'sheep': 0});
   const [tradingPlayerOffer, setTradingPlayerOffer] = useState({'wheat': 0, 'lumber': 0, 'brick': 0, 'ore': 0, 'sheep': 0});
   const [validTrade, setValidTrade] = useState(false);
-  const choosePartner = (e) => {
-    setTradePartner(props.players.filter(player => player.name == e.target['id'])[0]);
-    props.setForceUpdate(props.forceUpdate + 1);
-    setChoosingOrTrading('trading');
-  }
+
+  // Whenever either trade partner adjusts their offer, check to see if the proposed trade is valid. For the offers to be valid, both players must be offering at least one resource, and the offered resource types must not overlap- direct giveaways are not allowed!
   useEffect(() => {
     let currentOffer = false;
     let tradingOffer = false;
@@ -40,14 +37,27 @@ const TradePlayerModal = (props) => {
       setValidTrade(false);
     }
   }, [currentPlayerOffer, tradingPlayerOffer])
+
+  // Choose desired trade partner and switch to trade screen
+  const choosePartner = (e) => {
+    setTradePartner(props.players.filter(player => player.name == e.target['id'])[0]);
+    props.setForceUpdate(props.forceUpdate + 1);
+    setChoosingOrTrading('trading');
+  }
+
+  // Make changes to current player's trade offer state
   const changeCurrentOffer = (e) => {
     let resource = e.target.id.replace('currentPlayer', '').toLowerCase();
     setCurrentPlayerOffer({...currentPlayerOffer, [resource]: parseInt(e.target.value)});
   }
+
+  // Make changes to trade partner's offer state
   const changePartnerOffer = (e) => {
     let resource = e.target.id.replace('tradingPlayer', '').toLowerCase();
     setTradingPlayerOffer({...tradingPlayerOffer, [resource]: parseInt(e.target.value)});
   }
+
+  // Confirm the trade- make adjustments to players' resources, reset states, and hide modal
   const confirmTrade = (e) => {
     Object.keys(currentPlayerOffer).forEach(type => {
       props.whoseTurn[type] -= currentPlayerOffer[type];
@@ -59,8 +69,12 @@ const TradePlayerModal = (props) => {
     })
     setCurrentPlayerOffer({'wheat': 0, 'lumber': 0, 'brick': 0, 'ore': 0, 'sheep': 0});
     setTradingPlayerOffer({'wheat': 0, 'lumber': 0, 'brick': 0, 'ore': 0, 'sheep': 0});
+    setTradePartner();
+    setChoosingOrTrading('choosing');
+    setValidTrade(false);
     props.hideTradePlayerModal();
   }
+
   return (
     <Modal size={ choosingOrTrading == 'trading' ? 'lg' : ''} show={props.showTradePlayerModal} onHide={props.hideTradePlayerModal}>
       { choosingOrTrading === 'choosing' ?
@@ -150,7 +164,13 @@ const TradePlayerModal = (props) => {
                 </Col>
               </Row>
               <Button className="mr-3" disabled={ validTrade ? false : true } onClick={confirmTrade}>Confirm trade</Button>
-              <Button onClick={() => setChoosingOrTrading('choosing')}>Change trade partner</Button>
+              <Button onClick={() => {
+                setCurrentPlayerOffer({'wheat': 0, 'lumber': 0, 'brick': 0, 'ore': 0, 'sheep': 0});
+                setTradingPlayerOffer({'wheat': 0, 'lumber': 0, 'brick': 0, 'ore': 0, 'sheep': 0});
+                setTradePartner();
+                setChoosingOrTrading('choosing');
+                setValidTrade(false);
+              }}>Change trade partner</Button>
             </Form>
           </Modal.Body>
         </div>

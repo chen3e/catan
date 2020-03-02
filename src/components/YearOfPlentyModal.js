@@ -10,6 +10,7 @@ const YearOfPlentyModal = (props) => {
   const [ore, setOre] = useState(0);
   const [sheep, setSheep] = useState(0);
 
+  // Make adjustments to states
   const setResources = (e) => {
     if (e.target.id === 'wheat') {
       setWheat(e.target.value);
@@ -28,6 +29,7 @@ const YearOfPlentyModal = (props) => {
     }
   }
 
+  // Add appropriate resources, set states to zero and hide modal
   const confirmResources = (e) => {
     props.whoseTurn.wheat += parseInt(wheat);
     props.whoseTurn.lumber += parseInt(lumber);

@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
 const MonopolyModal = (props) => {
+  // Take all resources of the selected type from other players' hands and add those resources to the current player's hand
   const selectResource = (e) => {
     const resource = e.target.textContent.toLowerCase();
     const otherPlayers = props.players.filter(player => player !== props.whoseTurn);
@@ -14,7 +15,6 @@ const MonopolyModal = (props) => {
       player[resource] = 0;
     })
     props.setShowMonopolyModal(false);
-    console.log(props.whoseTurn)
   }
   return (
     <Modal show={props.showMonopolyModal}>

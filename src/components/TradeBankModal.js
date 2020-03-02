@@ -9,6 +9,7 @@ const TradeBankModal = (props) => {
   const [tradeFor, setTradeFor] = useState("");
   const [multiple, setMultiple] = useState(4);
 
+  // Upon the declaration/redeclaration of a resource to be traded in, check if any applicable port bonuses exist and setMultiple accordingly
   const changeType = (e) => {
     setQuantity(e.target.value);
     if (props.whoseTurn.ports.includes("triple")) {
@@ -26,6 +27,7 @@ const TradeBankModal = (props) => {
     props.setForceUpdate(props.forceUpdate + 1);
   }
 
+  // Adjust player's resources according to the form, reset appropriate states and hide modal
   const confirmTrade = () => {
     props.whoseTurn[type] -= quantity;
     props.whoseTurn[tradeFor] += quantity/multiple;
