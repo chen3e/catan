@@ -356,7 +356,7 @@ const Board = () => {
   const rollDice = () => {
     let _roll = (Math.floor(Math.random() * 6) + Math.floor(Math.random() * 6) + 2)
     setRollDisplay(_roll);
-    if (_roll == 7) {
+    if (_roll !== 7) {
       let _hexes = hexes.filter(hex => hex.number === _roll);
       for (let i = 0; i < _hexes.length; i++) {
         let _vertexes = _hexes[i].vertexes;
