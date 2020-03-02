@@ -1,0 +1,32 @@
+
+.knight {
+  background-image: url("../static/images/knight.jpg");
+}
+
+.knight > p {
+  color: rgb(200, 200, 200);
+}
+
+.monopoly {
+  background-image: url("../static/images/monopoly.jpg");
+}
+
+.monopoly > p {
+  color: rgb(128, 197, 0);
+}
+
+.year_of_plenty {
+  background-image: url("../static/images/year.jpg");
+}
+
+.year_of_plenty > p {
+  color: rgb(40, 98, 207);
+}
+
+.road_building {
+  background-image: url("../static/images/road.jpg");
+}
+
+.road_building > p {
+  color: rgb(230, 243, 49);
+}

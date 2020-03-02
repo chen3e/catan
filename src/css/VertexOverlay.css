@@ -43,27 +43,68 @@
   /* background-color: black; */
 }
 
-
 .player1 {
   background-color: green;
 }
 
 .player2 {
-  background-color: red;
+  background-color: rgb(255, 107, 107);
 }
 
 .player3 {
-  background-color: blue;
+  background-color: rgb(85, 85, 255);
 }
 
 .player4 {
-  background-color: yellow;
+  background-color: purple;
 }
 
-.city {
+.player1City {
+  background-color: rgb(0, 93, 0);
+}
+
+.player2City {
+  background-color: red;
+}
+
+.player3City {
+  background-color: blue;
+}
+
+.player4City {
+  background-color: rgb(65, 0, 65);
+}
+
+.triplePort {
+  border: 2px solid cyan;
+}
+
+.wheatPort {
+  border: 2px solid gold;
+}
+
+.lumberPort {
+  border: 2px solid brown;
+}
+
+.brickPort {
+  border: 2px solid orange;
+}
+
+.orePort {
   border: 2px solid black;
 }
 
-.port {
+.sheepPort {
+  border: 2px solid rgb(255, 255, 255);
+}
 
+.examplePort {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  border-radius: 50%;
+  margin-right: 10px;
+  vertical-align: top;
+  margin-top: 2px;
 }

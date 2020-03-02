@@ -7,10 +7,18 @@ const TradeBankModal = (props) => {
   const [type, setType] = useState("");
   const [quantity, setQuantity] = useState(0);
   const [tradeFor, setTradeFor] = useState("");
+  const [multiple, setMultiple] = useState(4);
+
   const changeType = (e) => {
     setQuantity(e.target.value);
+    if (props.whoseTurn.ports.includes("triple")) {
+      setMultiple(3);
+    }
     if (e.target.value != 0) {
       setType(e.target.id.substring(9, e.target.id.length).toLowerCase());
+      if (props.whoseTurn.ports.includes(type)) {
+        setMultiple(2);
+      }
     }
     else {
       setType("");
@@ -20,7 +28,7 @@ const TradeBankModal = (props) => {
 
   const confirmTrade = () => {
     props.whoseTurn[type] -= quantity;
-    props.whoseTurn[tradeFor] += quantity/4;
+    props.whoseTurn[tradeFor] += quantity/multiple;
     setType("");
     setQuantity(0);
     setTradeFor("");
@@ -33,6 +41,21 @@ const TradeBankModal = (props) => {
         <Modal.Title>Trade with bank</Modal.Title>
       </Modal.Header>
       <Modal.Body>
+        {props.whoseTurn.ports && props.whoseTurn.ports.length > 0 ? <p>Available ports: {props.whoseTurn.ports.map((port, index) => {
+          let lastPort = (index === props.whoseTurn.ports.length - 1);
+          if (index && lastPort) {
+            return port;
+          }
+          else if (index) {
+            return port + ", ";
+          }
+          else if (lastPort) {
+            return port.charAt(0).toUpperCase() + port.slice(1)
+          }
+          else {
+            return port.charAt(0).toUpperCase() + port.slice(1) + ", ";
+          }
+        })}</p> : <p>No ports</p>}
         <Form>
           <Form.Group>
             <Form.Label>Wheat ({props.whoseTurn.wheat})</Form.Label>
@@ -58,15 +81,16 @@ const TradeBankModal = (props) => {
             <Form.Label>Trade for:</Form.Label>
             <Form.Control id="tradeBankResource" as="select" onChange={(e) => setTradeFor(e.target.value)}>
               <option selected disabled></option>
-              <option value="wheat">wheat</option>
-              <option value="lumber">lumber</option>
-              <option value="brick">brick</option>
-              <option value="ore">ore</option>
-              <option value="sheep">sheep</option>
+              <option value="wheat">Wheat</option>
+              <option value="lumber">Lumber</option>
+              <option value="brick">Brick</option>
+              <option value="ore">Ore</option>
+              <option value="sheep">Sheep</option>
             </Form.Control>
           </Form.Group>
         </Form>
-        <Button style={{ display: quantity % 4 === 0 && tradeFor ? "block" : "none" }} onClick={confirmTrade}>Confirm trade</Button>
+        {/* <Button disabled={validTrade()} onClick={confirmTrade}>Confirm trade</Button> */}
+        <Button disabled={ quantity % multiple !== 0 || quantity === 0 || !tradeFor || tradeFor == type } onClick={confirmTrade}>Confirm trade</Button>
       </Modal.Body>
     </Modal >
   )

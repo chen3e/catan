@@ -42,12 +42,10 @@ const PathOverlay = (props) => {
           else {
             numbers[index].forEach((e, index) => orientation.push(index%2 === 0 ? "tiltDown" : "tiltUp"));
           }
-          console.log(x[0]+ " has orientation " + orientation)
           return (
             <div id={x[0]} className={"pathRow " + (x[1] == "vertical" ? "vertRow" : "tiltRow")}>
               {
                 numbers[index].map(function(y, yindex) {
-                  console.log(yindex);
                   return (
                     <div onClick={props.setupRoad} id={"path"+y} className={"path "+orientation[yindex]}></div>
                   )

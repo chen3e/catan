@@ -81,13 +81,13 @@
 }
 
 .player2 {
-  background-color: red;
+  background-color: rgb(255, 107, 107);
 }
 
 .player3 {
-  background-color: blue;
+  background-color: rgb(85, 85, 255);
 }
 
 .player4 {
-  background-color: yellow;
+  background-color: purple;
 }

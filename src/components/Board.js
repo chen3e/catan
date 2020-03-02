@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import '../css/Board.css'
-import { setupBoard } from '../setup';
-import { Player } from '../players';
+import { setupBoard, Player, shuffleCards } from '../setup';
+// import { Player } from '../players';
 import { PlayerModal } from '../components/PlayerModal';
 import { RobModal } from '../components/RobModal';
 import { HelpModal } from '../components/HelpModal';
@@ -12,6 +12,11 @@ import { VertexOverlay } from '../components/VertexOverlay';
 import { NumberOverlay } from '../components/NumberOverlay';
 import { RobLargeHandsModal } from '../components/RobLargeHandsModal';
 import { TradeBankModal } from '../components/TradeBankModal';
+import { TradePlayerModal } from '../components/TradePlayerModal';
+import { DevelopmentCardsModal } from '../components/DevelopmentCardsModal';
+import { MonopolyModal } from '../components/MonopolyModal';
+import { YearOfPlentyModal } from '../components/YearOfPlentyModal';
+import { VictoryModal } from '../components/VictoryModal';
 
 const Board = () => {
   const [forceUpdate, setForceUpdate] = useState(0);
@@ -20,11 +25,10 @@ const Board = () => {
   const [vertexes, setVertexes] = useState([]);
   const [paths, setPaths] = useState([]);
   const [players, setPlayers] = useState([]);
-  const [playerName, setPlayerName] = useState("");
-  const [showPlayerModal, setShowPlayerModal] = useState(false); //////
+  const [showPlayerModal, setShowPlayerModal] = useState(true); //////
   const [helpText, setHelpText] = useState("");
   const [whoseTurn, setWhoseTurn] = useState("");
-  const [setupPhase, setSetupPhase] = useState(true); ///////
+  const [setupPhase, setSetupPhase] = useState(false);
   const [setupPhaseRound, setSetupPhaseRound] = useState(1);
   const [setupRoadOrSettlement, setSetupRoadOrSettlement] = useState("settlement");
   const [lastSettlement, setLastSettlement] = useState();
@@ -39,40 +43,64 @@ const Board = () => {
   const [resourcesLost, setResourcesLost] = useState({ wheat: 0, lumber: 0, brick: 0, ore: 0, sheep: 0 });
   const [showHelpModal, setShowHelpModal] = useState(false);
   const [showTradeBankModal, setShowTradeBankModal] = useState(false);
+  const [showTradePlayerModal, setShowTradePlayerModal] = useState(false);
+  const [potentialPartners, setPotentialPartners] = useState([]);
+  const [availableCards, setAvailableCards] = useState(shuffleCards());
+  const [showDevelopmentCardsModal, setShowDevelopmentCardsModal] = useState(false);
+  const [showYearOfPlentyModal, setShowYearOfPlentyModal] = useState(false);
+  const [showMonopolyModal, setShowMonopolyModal] = useState(false);
+  const [roadBuildingCounter, setRoadBuildingCounter] = useState(0);
+  const [largestArmySize, setLargestArmySize] = useState(0);
+  const [largestArmyPlayer, setLargestArmyPlayer] = useState();
+  const [longestRoadLength, setLongestRoadLength] = useState(0);
+  const [longestRoadPlayer, setLongestRoadPlayer] = useState();
+  const [showVictoryModal, setShowVictoryModal] = useState(false);
 
+
+  // Starts the game- hides the add player modal and begins the game's setup phase
   const startGame = () => {
     setShowPlayerModal(false);
     setSetupPhase(true);
-    let p = players[0];
-    setWhoseTurn(p);
-    setHelpText(p.name + "Build a settlement!")
+    setWhoseTurn(players[0]);
+    setHelpText(players[0].name + "Build a settlement!")
   };
 
+  // Set up the board- add resources, connections between hex/path/vertex
   useEffect(() => {
     setupBoard(hexes, vertexes, paths, document);
-    let player1 = new Player("player1", 1); //////
-    player1.brick = 50;
-    player1.lumber = 50;
-    player1.sheep = 50;
-    player1.wheat = 50;
-    player1.ore = 50;
-    let player2 = new Player("player2", 2); //////
-    player2.sheep = 4;
-    player2.ore = 3;
-    player2.wheat = 6;
-    setPlayers([player1, player2]); //////
-    setWhoseTurn(player1); //////
+    // let player1 = new Player("player1", 1); //////
+    // player1.brick = 50;
+    // player1.lumber = 50;
+    // player1.sheep = 50;
+    // player1.wheat = 50;
+    // player1.ore = 50;
+    // player1.purchased_cards = ["Road Building", "Road Building", "Road Building", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Road Building", "Road Building", "Year of Plenty", "Year of Plenty", "Monopoly", "Monopoly"]
+    // let player2 = new Player("player2", 2); //////
+    // player2.lumber = 15;
+    // player2.ore = 3;
+    // player2.brick = 15;
+    // player2.sheep = 3;
+    // player2.wheat = 3;
+    // player2.purchased_cards = ["Road Building", "Road Building", "Road Building", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Road Building", "Road Building", "Year of Plenty", "Year of Plenty", "Monopoly", "Monopoly"]
+    // let player3 = new Player("player3", 3); //////
+    // player3.lumber = 15;
+    // player3.ore = 3;
+    // player3.brick = 15;
+    // player3.sheep = 3;
+    // player3.wheat = 3;
+    // let player4 = new Player("player4", 4); //////
+    // player4.lumber = 4;
+    // player4.ore = 3;
+    // player4.brick = 6;
+
+    // setPlayers([player1, player2, player3]); //////
+    // setWhoseTurn(player1); //////
   }, [])
 
-  const addPlayers = (e) => {
-    if (playerName.length) {
-      let number = players.length + 1;
-      let player = new Player(playerName, number);
-      setPlayers([...players, player]);
-      setPlayerName('');
-    }
-  };
+  // Create a player instance and clear the name field
 
+
+  // Transition to next player- simply next player in array, or previous if in second round of setup
   const nextPlayer = () => {
     if (setupPhase) {
       if (setupPhaseRound == 1) {
@@ -94,27 +122,45 @@ const Board = () => {
     }
   }
 
+  const setAdjacentPaths = (_path, player) => {
+    _path.vertexes.filter(vertex => !vertex.owner || vertex.owner === player).forEach(end => {
+      end.paths.filter(path => path !== _path && path.owner === player).forEach(road => {
+        _path.adjacent_roads.push(road);
+        road.adjacent_roads.push(_path);
+      })
+    })
+  }
+
+  // Add a road
   const setupRoad = (e) => {
+    // can't build roads during setup phase when a settlement is needed instead
     if (setupPhase && setupRoadOrSettlement == "settlement") {
       alert("It's time to build a settlement, not a road!");
       return;
     }
-    let p = paths[e.target.id.substring(4, e.target.id.length)];
-    let _vertexes = p.vertexes;
+    // collect specified path and its vertices, and declare a variable to track if a road can be built here
+    let _path = paths[e.target.id.substring(4, e.target.id.length)];
+    let _vertexes = _path.vertexes;
     let valid = false;
-    for (let i = 0; i < _vertexes.length; i++) {
-      if (_vertexes[i] === lastSettlement) {
-        valid = true;
-      }
-    }
-    if (p.owner) {
+    // can't build on top of preexisting roads
+    if (_path.owner) {
       alert("This road has already been built!");
       return;
     }
-    if (setupPhase){
+    // setup phase road building
+    if (setupPhase) {
+      // the selected path is valid if it is adjancent to the last built settlement
+      for (let i = 0; i < _vertexes.length; i++) {
+        if (_vertexes[i] === lastSettlement) {
+          valid = true;
+        }
+      }
+      // add CSS to the clicked element, note the new road's owner
+      // then if current player is last in setup round 1, switch to settlement setup mode; OR if current player is last in setup round 2, start game; OR advance to next player and switch to settlement setup mode
       if (valid) {
         e.target['classList'].add("player" + whoseTurn.number);
-        p.owner = whoseTurn;
+        _path.owner = whoseTurn;
+        setAdjacentPaths(_path, whoseTurn);
         setSetupRoadOrSettlement("settlement");
         if (whoseTurn == players[players.length - 1] && setupPhaseRound == 1) {
           setSetupPhaseRound(2);
@@ -122,6 +168,7 @@ const Board = () => {
         }
         else if (whoseTurn == players[0] && setupPhaseRound == 2) {
           setSetupPhase(false);
+          setLastSettlement(null);
           setTurnStage("ROLL");
           setHelpText("The game has started- roll the dice!")
         }
@@ -134,16 +181,20 @@ const Board = () => {
         alert("Invalid road- choose a road adjacent to the settlement you just built")
       }
     }
+    // normal road building
     else {
-      if (turnStage !== "TRADE/BUILD") {
+      // must be appropriate time to build
+      if (turnStage !== "TRADE/BUILD" && turnStage !== "ROAD BUILDING") {
         alert("Now is not the time to build a road or settlement!");
         return;
       }
+      // if any adjacent vertices are owned by current player, selected path is valid
       if (_vertexes.filter(_vertex => _vertex.owner === whoseTurn).length) {
         valid = true;
       }
+      // if any adjacent vertices are unoccupied and connected to another road owned by current player, selected path is valid
       for (let i = 0; i < _vertexes.length; i++) {
-        if (_vertexes[i].owner == null){
+        if (_vertexes[i].owner == null) {
           for (let j = 0; j < _vertexes[i].paths.length; j++) {
             if (_vertexes[i].paths[j].owner == whoseTurn) {
               valid = true;
@@ -151,117 +202,161 @@ const Board = () => {
           }
         }
       }
-      if (whoseTurn.lumber < 1 || whoseTurn.brick < 1) {
+      // need resources to build without development card
+      if (turnStage === "TRADE/BUILD" && whoseTurn.lumber < 1 || whoseTurn.brick < 1) {
         alert("You don't have enough resources to build a road!");
       }
+      // add CSS to selected element, note the new road's owner, update player's resources or update road building development card counter
       else if (valid) {
         e.target['classList'].add("player" + whoseTurn.number);
-        p.owner = whoseTurn;
-        whoseTurn.brick--;
-        whoseTurn.lumber--;
+        _path.owner = whoseTurn;
+        setAdjacentPaths(_path, whoseTurn);
+        if (turnStage === "TRADE/BUILD") {
+          whoseTurn.brick--;
+          whoseTurn.lumber--;
+        }
+        else if (turnStage === "ROAD BUILDING") {
+          if (roadBuildingCounter === 1) {
+            setTurnStage("TRADE/BUILD");
+          }
+          setRoadBuildingCounter(roadBuildingCounter - 1);
+        }
         setForceUpdate(forceUpdate + 1);
+        getLongestRoad();
       }
+      // display error alert
       else {
         alert("New roads must connect to one of your roads or settlements!");
       }
     }
   }
 
-  const setupSettlement = (e) => {
-    e.target['classList'].add("player1");
+  const breakAdjacentRoads = (_vertex, player) => {
+    let brokenRoads = _vertex.paths.filter(path => path.owner && path.owner !== player);
+    if (brokenRoads.length === 2) {
+      brokenRoads[0].adjacent_roads = brokenRoads[0].adjacent_roads.filter(adjacent_road => adjacent_road !== brokenRoads[1]);
+      brokenRoads[1].adjacent_roads = brokenRoads[1].adjacent_roads.filter(adjacent_road => adjacent_road !== brokenRoads[0]);
+    }
+    return;
   }
 
-  // const setupSettlement = (e) => {
-  //   if (setupPhase && setupRoadOrSettlement == "road") {
-  //     alert("It's time to build a road, not a settlement!");
-  //     return;
-  //   }
-  //   let v = vertexes[e.target.id.substring(6, e.target.id.length)];
-  //   let neighbors = v.neighbors;
-  //   let tooClose = false;
-  //   for (let i = 0; i < neighbors.length; i++) {
-  //     if (neighbors[i].owner) {
-  //       tooClose = true;
-  //     }
-  //   }
-  //   if (tooClose) {
-  //     alert("This settlement is too close to another one!");
-  //   }
-  //   else {
-  //     let v = vertexes[e.target.id.substring(6, e.target.id.length)];
-  //     if (setupPhase) {
-  //       if (v.owner) {
-  //         alert("This settlement has already been built!");
-  //         return;
-  //       }
-  //       setLastSettlement(v);
-  //       e.target['classList'].add("player" + whoseTurn.number);
-  //       v.owner = whoseTurn;
-  //       if (setupPhaseRound == 2) {
-  //         for (let i = 0; i < v.hexes.length; i++) {
-  //           let resource_type = v.hexes[i].resource;
-  //           whoseTurn[resource_type]++;
-  //         }
-  //       }
-  //       whoseTurn.points++;
-  //       setForceUpdate(forceUpdate + 1);
-  //       setSetupRoadOrSettlement("road");
-  //       setHelpText("Build a road adjacent to the settlement you just placed!");
-  //     }
-  //     else if (v.owner === whoseTurn) {
-  //       if (turnStage !== "TRADE/BUILD") {
-  //         alert("Now is not the time to build a road or settlement!");
-  //         return;
-  //       }
-  //       let cities = vertexes.filter(vertex => vertex.owner === whoseTurn && vertex.city);
-  //       if (cities.length >= 4) {
-  //         alert("You cannot build any more cities!");
-  //       }
-  //       else if (whoseTurn.wheat < 2 || whoseTurn.ore < 3) {
-  //         alert("You don't have enough resources to build a city!");
-  //       }
-  //       else {
-  //         whoseTurn.points++;
-  //         whoseTurn.wheat -= 2;
-  //         whoseTurn.ore -= 3;
-  //         e.target['classList'].add("city");
-  //         v.city = true;
-  //         setForceUpdate(forceUpdate + 1);
-  //       }
-  //     }
-  //     else if (v.owner && v.owner !== whoseTurn) {
-  //       alert("This settlement has already been built!");
-  //     }
-  //     else if (!v.paths.filter(path => path.owner === whoseTurn).length) {
-  //       alert("You must build settlements connected to a road you own!");
-  //     }
-  //     else {
-  //       let settlements = vertexes.filter(vertex => vertex.owner === whoseTurn && !vertex.city);
-  //       if (settlements.length >= 5) {
-  //         alert("You cannot build any more settlements!");
-  //         return;
-  //       }
-  //       else if (whoseTurn.wheat < 1 || whoseTurn.lumber < 1 || whoseTurn.brick < 1 || whoseTurn.sheep < 1) {
-  //         alert("You don't have enough resources to build a settlement!");
-  //       }
-  //       else {
-  //         whoseTurn.points++;
-  //         whoseTurn.wheat--;
-  //         whoseTurn.lumber--;
-  //         whoseTurn.brick--;
-  //         whoseTurn.sheep--;
-  //         e.target['classList'].add("player" + whoseTurn.number);
-  //         v.owner = whoseTurn;
-  //         setForceUpdate(forceUpdate + 1);
-  //       }
-  //     }
-  //   }
-  // }
+  // Add a settlement
+  const setupSettlement = (e) => {
+    // can't build settlements during setup phase or road building when a road is needed instead
+    if (setupPhase && setupRoadOrSettlement == "road" || turnStage == "ROAD BUILDING") {
+      alert("It's time to build a road, not a settlement!");
+      return;
+    }
+    // collect selected vertex, neighboring vertices, and determine if vertex is too close to preexisting settlements
+    let _vertex = vertexes[e.target.id.substring(6, e.target.id.length)];
+    let neighbors = _vertex.neighbors;
+    let tooClose = false;
+    for (let i = 0; i < neighbors.length; i++) {
+      if (neighbors[i].owner) {
+        tooClose = true;
+      }
+    }
+    if (tooClose) {
+      alert("This settlement is too close to another one!");
+    }
+    else {
+      // setup phase settlement building
+      if (setupPhase) {
+        // can't build on top of preexisting settlements in setup phase
+        if (_vertex.owner) {
+          alert("This settlement has already been built!");
+          return;
+        }
+        // point to this as the last built settlement for road setup purposes, add CSS, note the settlement's owner and grant victory point, switch to road setup phase
+        // if round 2 of setup, give player appropriate resources
+        setLastSettlement(_vertex);
+        e.target['classList'].add("player" + whoseTurn.number);
+        _vertex.owner = whoseTurn;
+        if (setupPhaseRound == 2) {
+          for (let i = 0; i < _vertex.hexes.length; i++) {
+            let resource_type = _vertex.hexes[i].resource;
+            whoseTurn[resource_type]++;
+          }
+        }
+        whoseTurn.points++;
+        breakAdjacentRoads(_vertex, whoseTurn);
+        if (!whoseTurn["ports"].includes(_vertex.port) && _vertex.port) {
+          whoseTurn["ports"].push(_vertex.port);
+        }
+        setSetupRoadOrSettlement("road");
+        setHelpText("Build a road adjacent to the settlement you just placed!");
+      }
+      // attempt to build city
+      else if (_vertex.owner === whoseTurn) {
+        // must roll dice before building
+        if (turnStage !== "TRADE/BUILD") {
+          alert("Now is not the time to build a road or settlement!");
+          return;
+        }
+        // get all current player's cities, and check if they can build anymore
+        let cities = vertexes.filter(vertex => vertex.owner === whoseTurn && vertex.city);
+        if (cities.length >= 4) {
+          alert("You cannot build any more cities!");
+        }
+        // check to see if player has enough resources
+        else if (whoseTurn.wheat < 2 || whoseTurn.ore < 3) {
+          alert("You don't have enough resources to build a city!");
+        }
+        // add CSS to selected element, grant current player victory point, subtract resources
+        else {
+          whoseTurn.points++;
+          whoseTurn.wheat -= 2;
+          whoseTurn.ore -= 3;
+          e.target['classList'].add(whoseTurn.name+"City");
+          _vertex.city = true;
+          setForceUpdate(forceUpdate + 1);
+          checkVictory();
+        }
+      }
+      // can't build on top of other players' settlements/cities
+      else if (_vertex.owner && _vertex.owner !== whoseTurn) {
+        alert("This settlement has already been built!");
+      }
+      // can't build settlements without adjacent road
+      else if (!_vertex.paths.filter(path => path.owner === whoseTurn).length) {
+        alert("You must build settlements connected to a road you own!");
+      }
+      else {
+        // get all current player's settlements, and check if they can build anymore
+        let settlements = vertexes.filter(vertex => vertex.owner === whoseTurn && !vertex.city);
+        if (settlements.length >= 5) {
+          alert("You cannot build any more settlements!");
+          return;
+        }
+        // check to see if player has enough resources
+        else if (whoseTurn.wheat < 1 || whoseTurn.lumber < 1 || whoseTurn.brick < 1 || whoseTurn.sheep < 1) {
+          alert("You don't have enough resources to build a settlement!");
+        }
+        // add CSS to selected element, grant current player victory point, subtract resources
+        else {
+          whoseTurn.points++;
+          whoseTurn.wheat--;
+          whoseTurn.lumber--;
+          whoseTurn.brick--;
+          whoseTurn.sheep--;
+          e.target["classList"].add("player" + whoseTurn.number);
+          if (!whoseTurn["ports"].includes(_vertex.port) && _vertex.port) {
+            whoseTurn["ports"].push(_vertex.port);
+          }
+          _vertex.owner = whoseTurn;
+          breakAdjacentRoads(_vertex, whoseTurn);
+          getLongestRoad();
+          setForceUpdate(forceUpdate + 1);
+          checkVictory();
+        }
+      }
+    }
+  }
 
   const rollDice = () => {
     let _roll = (Math.floor(Math.random() * 6) + Math.floor(Math.random() * 6) + 2)
     setRollDisplay(_roll);
-    if (_roll !== 7) {
+    if (_roll == 7) {
       let _hexes = hexes.filter(hex => hex.number === _roll);
       for (let i = 0; i < _hexes.length; i++) {
         let _vertexes = _hexes[i].vertexes;
@@ -321,12 +416,14 @@ const Board = () => {
     setShowRobModal(true);
   }
 
-  const rob = (e) => {
+  const rob = (victim_name) => {
     setShowRobModal(false);
-    if (e.target.textContent == "Don't rob anyone") {
+    if (victim_name === null) {
+      setTurnStage("TRADE/BUILD");
+      setHelpText("Conduct trades, or build settlements and roads by clicking on the board! Click 'end turn' when you're done.");
       return;
     }
-    let victim = players[e.target.textContent.substring(6, 7) - 1];
+    let victim = players.filter(_player => _player.name === victim_name)[0];
     let victimResources = [];
     for (let i = 0; i < victim.wheat; i++) {
       victimResources.push("wheat");
@@ -413,6 +510,10 @@ const Board = () => {
   }
 
   const openTradeBankModal = () => {
+    if (turnStage !== "TRADE/BUILD") {
+      alert("Now is not the time to trade!");
+      return;
+    }
     setShowTradeBankModal(true);
   }
 
@@ -420,14 +521,279 @@ const Board = () => {
     setShowTradeBankModal(false);
   }
 
+  const openTradePlayerModal = () => {
+    if (turnStage !== "TRADE/BUILD") {
+      alert("Now is not the time to trade!");
+      return;
+    }
+    setPotentialPartners(players.filter(player => player !== whoseTurn));
+    setShowTradePlayerModal(true);
+  }
+
+  const hideTradePlayerModal = () => {
+    setShowTradePlayerModal(false);
+  }
+
+  const openDevelopmentCardsModal = () => {
+    if (turnStage !== "TRADE/BUILD") {
+      alert("Now is not the time to use development cards!");
+      return;
+    }
+    setShowDevelopmentCardsModal(true);
+  }
+
+  const hideDevelopmentCardsModal = () => {
+    setShowDevelopmentCardsModal(false);
+  }
+  
+  const buyCard = () => {
+    if (turnStage !== "TRADE/BUILD") {
+      alert("Now is not the time to buy a development card!");
+    }
+    else if (!whoseTurn.wheat || !whoseTurn.sheep || !whoseTurn.ore) {
+      alert("You do not have enough resources to purchase a development card!");
+    }
+    else if (!availableCards.length) {
+      alert("There are no more development cards to buy this game.");
+    }
+    else {
+      whoseTurn.wheat -= 1;
+      whoseTurn.sheep -= 1;
+      whoseTurn.ore -= 1;
+      let card = availableCards.pop();
+      if (!["Knight", "Road Building", "Year of Plenty", "Monopoly"].includes(card)) {
+        whoseTurn.played_cards.push(card);
+        whoseTurn.points += 1;
+      }
+      else {
+        whoseTurn.purchased_cards.push(card);
+      }
+      setForceUpdate(forceUpdate + 1);
+    }
+  }
+
+  const getPlayerArmySize = (_player) => {
+    let army_size = 0;
+    _player.played_cards.forEach(card => {
+      if (card === "Knight") {
+        army_size += 1;
+      }
+    })
+    return army_size;
+  }
+
+  const cardEffects = (card) => {
+    if (card === "Knight") {
+      setTurnStage("ROBBING");
+      setMovingRobber(true);
+      let largeArmyPlayers = players.filter(_player => {
+        return getPlayerArmySize(_player) >= 3;
+      })
+      if (largeArmyPlayers.length && !largestArmyPlayer) {
+        whoseTurn.points += 2;
+        setLargestArmyPlayer(whoseTurn);
+        setLargestArmySize(getPlayerArmySize(whoseTurn));
+        alert(whoseTurn.name + " has raised the largest army in Catan, with 3 knights!");
+      }
+      else if (largeArmyPlayers.length && largestArmyPlayer) {
+        const largerArmies = largeArmyPlayers.filter(_player => getPlayerArmySize(_player) > largestArmySize);
+        if (largerArmies.length) {
+          alert(whoseTurn.name + " has recruited a larger army than " + largestArmyPlayer.name + "'s, with " + getPlayerArmySize(whoseTurn) + " knights!");
+          largestArmyPlayer.points -= 2;
+          whoseTurn.points += 2;
+          setLargestArmyPlayer(whoseTurn);
+          setLargestArmySize(getPlayerArmySize(whoseTurn));
+        }
+      }
+    }
+    else if (card === "Monopoly") {
+      setShowMonopolyModal(true);
+    }
+    else if (card === "Year of Plenty") {
+      setShowYearOfPlentyModal(true);
+    }
+    else if (card === "Road Building") {
+      setTurnStage("ROAD BUILDING");
+      setRoadBuildingCounter(2);
+    }
+    // console.log(whoseTurn.played_cards);
+  }
+
+  const arrayMaximumIndex = (array) => {
+    let maximum = 0;
+      let maximumIndex = 0;
+      for (let i = 0; i < array.length; i++) {
+        if (array[i].length > maximum) {
+          maximum = array[i].length;
+          maximumIndex = i;
+        }
+      }
+    return maximumIndex;
+  }
+
+  const removeLoops = (array) => {
+    let elements = [];
+    let index = 0;
+    while (index < array.length) {
+      if (!elements.includes(array[index])) {
+        elements.push(array[index]);
+      }
+      else {
+        array.length = index;
+        break;
+      }
+      index++;
+    }
+    return array;
+  }
+
+  const exploreRoad = (_path, searchedRoads, other_branch=null) => {
+    const adjacent_roads = _path.adjacent_roads.filter(road => !searchedRoads.includes(road) && road !== other_branch);
+    if (other_branch && adjacent_roads) {
+      searchedRoads = searchedRoads.filter(e => e !== other_branch[0]);
+    }
+    searchedRoads.push(_path);
+    if (!adjacent_roads.length || adjacent_roads.length === 4) {
+      return searchedRoads;
+    }
+    else if (adjacent_roads.length === 1) {
+      searchedRoads = (exploreRoad(adjacent_roads[0], searchedRoads));
+      return searchedRoads;
+    }
+    else if (adjacent_roads.length === 2) {
+      const furtherRoads = [];
+      let vertexesOne = adjacent_roads[0].vertexes;
+      let vertexesTwo = adjacent_roads[1].vertexes;
+      let intersection = vertexesOne.filter(_vertex => vertexesTwo.includes(_vertex));
+
+      if (intersection.length) {
+        furtherRoads.push(exploreRoad(adjacent_roads[0], searchedRoads, adjacent_roads[1]));
+        furtherRoads.push(exploreRoad(adjacent_roads[1], searchedRoads, adjacent_roads[0]));
+        if (furtherRoads[0].length >= furtherRoads[1].length) {
+          searchedRoads = (furtherRoads[0]);
+          return searchedRoads;
+        }
+        else {
+          searchedRoads = (furtherRoads[1]);
+          return searchedRoads;
+        }
+      }
+      else {
+        furtherRoads.push(exploreRoad(adjacent_roads[0], searchedRoads));
+        furtherRoads.push(exploreRoad(adjacent_roads[1], searchedRoads));
+        searchedRoads = searchedRoads.concat(furtherRoads[0]).concat(furtherRoads[1]);
+        return searchedRoads;
+      }
+    }
+    else if (adjacent_roads.length === 3) {
+      const furtherRoads = [];
+      if (adjacent_roads[0].vertexes.filter(_vertex => adjacent_roads[1].vertexes.includes(_vertex)).length > 0) {
+        furtherRoads.push(exploreRoad(adjacent_roads[2], searchedRoads))
+        furtherRoads.push(exploreRoad(adjacent_roads[0], searchedRoads, adjacent_roads[1]));
+        furtherRoads.push(exploreRoad(adjacent_roads[1], searchedRoads, adjacent_roads[0]));
+        if (furtherRoads[0].length >= furtherRoads[1].length) {
+          searchedRoads = furtherRoads[0].concat(furtherRoads[2]);
+          return searchedRoads;
+        }
+        else {
+          searchedRoads = furtherRoads[1].concat(furtherRoads[2]);
+          return searchedRoads;
+        }
+      }
+      else if (adjacent_roads[0].vertexes.filter(_vertex => adjacent_roads[2].vertexes.includes(_vertex)).length > 0) {
+        furtherRoads.push(exploreRoad(adjacent_roads[1], searchedRoads));
+        furtherRoads.push(exploreRoad(adjacent_roads[0], searchedRoads, adjacent_roads[2]));
+        furtherRoads.push(exploreRoad(adjacent_roads[1], searchedRoads, adjacent_roads[0]));
+        if (furtherRoads[0].length >= furtherRoads[2].length) {
+          searchedRoads = furtherRoads[0].concat(furtherRoads[1]);
+          return searchedRoads;
+        }
+        else {
+          searchedRoads = furtherRoads[2].concat(furtherRoads[1]);
+          return searchedRoads;
+        }
+      }
+      else {
+        furtherRoads.push(exploreRoad(adjacent_roads[0], searchedRoads));
+        furtherRoads.push(exploreRoad(adjacent_roads[1], searchedRoads, adjacent_roads[2]));
+        furtherRoads.push(exploreRoad(adjacent_roads[2], searchedRoads, adjacent_roads[1]));
+        if (furtherRoads[1].length >= furtherRoads[2].length) {
+          searchedRoads = furtherRoads[0].concat(furtherRoads[1]);
+          return searchedRoads;
+        }
+        else {
+          searchedRoads = furtherRoads[2].concat(furtherRoads[0]);
+          return searchedRoads;
+        }
+      }
+    }
+  }
+
+  // function to longest roads for players
+
+  const getLongestRoad = () => {
+    let longestRoads = [];
+    let longestLength = 0;
+    let longestPlayer = null;
+    players.forEach(player => {
+      let playerLongRoads = [];
+      const playerRoads = paths.filter(path => path.owner === player);
+      if (playerRoads.length) {
+        playerRoads.forEach(road => {
+          let longRoad = exploreRoad(road, [], undefined);
+          playerLongRoads.push(removeLoops(longRoad));
+        })
+        longestRoads.push({[player.name]: playerLongRoads[arrayMaximumIndex(playerLongRoads)].length});
+        player.road_length = playerLongRoads[arrayMaximumIndex(playerLongRoads)].length;
+      }
+    })
+    for (let i = 0; i < longestRoads.length; i++) {
+      if (Object.values(longestRoads[i])[0] >= 5 && Object.values(longestRoads[i])[0] > longestLength) {
+        longestLength = Object.values(longestRoads[i])[0];
+        longestPlayer = players.filter(_player => _player.name === Object.keys(longestRoads[i])[0])[0];
+      }
+    }
+    if (!longestRoadPlayer && longestPlayer) {
+      setLongestRoadLength(longestLength);
+      setLongestRoadPlayer(longestPlayer);
+      longestPlayer.points += 2;
+      alert(longestPlayer.name+" has built the longest road in Catan, and gains 2 points!");
+    }
+    else if (longestRoadPlayer && longestPlayer && longestPlayer !== longestRoadPlayer) {
+      longestRoadPlayer.points -= 2;
+      alert(longestPlayer.name+"'s road has overtaken "+longestRoadPlayer.name+"'s in length, and takes two points!");
+      setLongestRoadLength(longestLength);
+      setLongestRoadPlayer(longestPlayer);
+      longestPlayer.points += 2;
+    }
+    else if (longestRoadPlayer && !longestPlayer) {
+      alert("There are no long roads left in Catan. The previous owner of the longest road loses two points.");
+      setLongestRoadLength(0);
+      longestRoadPlayer.points -= 2;
+      setLongestRoadPlayer();
+    }
+  }
+
+
+  const checkVictory = () => {
+    if (whoseTurn["points"] >= 10) {
+      setShowVictoryModal(true);
+    }
+  }
+
   return (
     <div id="boardComponent">
-      <PlayerModal showPlayerModal={showPlayerModal} startGame={startGame} players={players} playerName={playerName} setPlayerName={setPlayerName} addPlayers={addPlayers} />
+      <PlayerModal showPlayerModal={showPlayerModal} startGame={startGame} players={players} setPlayers={setPlayers}/>
       <RobModal showRobModal={showRobModal} robbedPlayers={robbedPlayers} rob={rob} />
-      <RobLargeHandsModal playerLosingResources={playerLosingResources} numberResourcesToLose={numberResourcesToLose} chooseLostResources={chooseLostResources} resourcesLost={resourcesLost} setResourcesLost={setResourcesLost} />
-      <HelpModal showHelpModal={showHelpModal} hideHelpModal={hideHelpModal}/>
-      <TradeBankModal showTradeBankModal={showTradeBankModal} hideTradeBankModal={hideTradeBankModal} whoseTurn={whoseTurn} forceUpdate={forceUpdate} setForceUpdate={setForceUpdate}/>
-      <PlayerTab whoseTurn={whoseTurn} helpText={helpText} turnStage={turnStage} rollDice={rollDice} rollDisplay={rollDisplay} movingRobber={movingRobber} nextPlayer={nextPlayer} turnStage={turnStage} openHelpModal={openHelpModal} openTradeBankModal={openTradeBankModal}/>
+      <RobLargeHandsModal playerLondesingResources={playerLosingResources} numberResourcesToLose={numberResourcesToLose} chooseLostResources={chooseLostResources} resourcesLost={resourcesLost} setResourcesLost={setResourcesLost} />
+      <HelpModal showHelpModal={showHelpModal} hideHelpModal={hideHelpModal} />
+      <TradeBankModal showTradeBankModal={showTradeBankModal} hideTradeBankModal={hideTradeBankModal} whoseTurn={whoseTurn} forceUpdate={forceUpdate} setForceUpdate={setForceUpdate} />
+      <TradePlayerModal showTradePlayerModal={showTradePlayerModal} hideTradePlayerModal={hideTradePlayerModal} whoseTurn={whoseTurn} players={players} potentialPartners={potentialPartners} forceUpdate={forceUpdate} setForceUpdate={setForceUpdate} />
+      <PlayerTab whoseTurn={whoseTurn} helpText={helpText} turnStage={turnStage} rollDice={rollDice} rollDisplay={rollDisplay} movingRobber={movingRobber} nextPlayer={nextPlayer} turnStage={turnStage} openHelpModal={openHelpModal} openTradeBankModal={openTradeBankModal} openTradePlayerModal={openTradePlayerModal} buyCard={buyCard} openDevelopmentCardsModal={openDevelopmentCardsModal}/>
+      <DevelopmentCardsModal whoseTurn={whoseTurn} showDevelopmentCardsModal={showDevelopmentCardsModal} hideDevelopmentCardsModal={hideDevelopmentCardsModal} turnStage={turnStage} setTurnStage={setTurnStage} cardEffects={cardEffects}></DevelopmentCardsModal>
+      <MonopolyModal whoseTurn={whoseTurn} players={players} showMonopolyModal={showMonopolyModal} setShowMonopolyModal={setShowMonopolyModal}></MonopolyModal>
+      <YearOfPlentyModal whoseTurn={whoseTurn} showYearOfPlentyModal={showYearOfPlentyModal} setShowYearOfPlentyModal={setShowYearOfPlentyModal}></YearOfPlentyModal>
+      <VictoryModal whoseTurn={whoseTurn} showVictoryModal={showVictoryModal}></VictoryModal>
       <div id="overlays">
         <HexOverlay clickHex={clickHex} />
         <PathOverlay setupRoad={setupRoad} />

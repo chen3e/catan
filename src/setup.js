@@ -6,6 +6,7 @@ class Vertex {
     this.neighbors = [];
     this.owner = null;
     this.city = false;
+    this.port = null;
   }
 }
 
@@ -14,6 +15,7 @@ class Path {
     this.name = name;
     this.vertexes = [];
     this.owner = null;
+    this.adjacent_roads = [];
   }
 }
 
@@ -26,6 +28,36 @@ class Hex {
     this.robber = false;
   }
 }
+
+class Player {
+  constructor(name, number){
+    this.name = name;
+    this.number = number;
+    this.wheat = 0;
+    this.lumber = 0;
+    this.brick = 0;
+    this.sheep = 0;
+    this.ore = 0;
+    this.points = 0;
+    this.ports = [];
+    this.purchased_cards = [];
+    this.played_cards = [];
+  }
+}
+
+const ports = [2, 3, 5, 6, 15, 25, 36, 46, 53, 52, 50, 49, 39, 38, 27, 16, 7, 8];
+const startPortIndices= [0, 3, 6];
+const portTypes = [
+  {resource: "triple", class: "triplePort"},
+  {resource: "triple", class: "triplePort"},
+  {resource: "brick", class: "brickPort"},
+  {resource: "lumber", class: "lumberPort"},
+  {resource: "triple", class: "triplePort"},
+  {resource: "wheat", class: "wheatPort"},
+  {resource: "ore", class: "orePort"},
+  {resource: "triple", class: "triplePort"},
+  {resource: "sheep", class: "sheepPort"},
+]
 
 const randomFields = () => {
   let fields = ['ore', 'ore', 'ore', 'wheat', 'wheat', 'wheat', 'wheat', 'lumber', 'lumber', 'lumber', 'lumber', 'sheep', 'sheep', 'sheep', 'sheep', 'brick', 'brick', 'brick', null];
@@ -63,6 +95,14 @@ const setupBoard = (hexes, vertexes, paths, document) => {
     let path = new Path(p[i]['id']);
     paths.push(path);
   }
+  let vertices = document.querySelectorAll('div.vertex');
+  for (let i = 0; i < ports.length; i++) {
+    let type = portTypes[Math.floor(i/2)];
+    vertices[ports[i]]['classList'].add(type.class);
+    let vertex = vertexes[vertices[ports[i]]['id'].replace("vertex", "")];
+    vertex.port = type.resource;
+  }
+
   vertexes[0].hexes = [hexes[0]];
   vertexes[0].paths = [paths[0], paths[6]];
   vertexes[0].neighbors = [vertexes[1], vertexes[8]];
@@ -304,73 +344,73 @@ const setupBoard = (hexes, vertexes, paths, document) => {
   paths[2].vertexes = [vertexes[2], vertexes[3]];
   paths[3].vertexes = [vertexes[3], vertexes[4]];
   paths[4].vertexes = [vertexes[4], vertexes[5]];
-  // paths[5].vertexes = [vertexes[5], vertexes[6]];
-  // paths[6].vertexes = [vertexes[0], vertexes[8]];
-  // paths[7].vertexes = [vertexes[2], vertexes[10]];
-  // paths[8].vertexes = [vertexes[4], vertexes[12]];
-  // paths[9].vertexes = [vertexes[6], vertexes[14]];
-  // paths[10].vertexes = [vertexes[7], vertexes[8]];
-  // paths[11].vertexes = [vertexes[8], vertexes[9]];
-  // paths[12].vertexes = [vertexes[9], vertexes[10]];
-  // paths[13].vertexes = [vertexes[10], vertexes[11]];
-  // paths[14].vertexes = [vertexes[11], vertexes[12]];
-  // paths[15].vertexes = [vertexes[12], vertexes[13]];
-  // paths[16].vertexes = [vertexes[13], vertexes[14]];
-  // paths[17].vertexes = [vertexes[14], vertexes[15]];
-  // paths[18].vertexes = [vertexes[7], vertexes[17]];
-  // paths[19].vertexes = [vertexes[9], vertexes[19]];
-  // paths[20].vertexes = [vertexes[11], vertexes[21]];
-  // paths[21].vertexes = [vertexes[13], vertexes[23]];
-  // paths[22].vertexes = [vertexes[15], vertexes[25]];
-  // paths[23].vertexes = [vertexes[16], vertexes[17]];
-  // paths[24].vertexes = [vertexes[17], vertexes[18]];
-  // paths[25].vertexes = [vertexes[18], vertexes[19]];
-  // paths[26].vertexes = [vertexes[19], vertexes[20]];
-  // paths[27].vertexes = [vertexes[20], vertexes[21]];
-  // paths[28].vertexes = [vertexes[21], vertexes[22]];
-  // paths[29].vertexes = [vertexes[22], vertexes[23]];
-  // paths[30].vertexes = [vertexes[23], vertexes[24]];
-  // paths[31].vertexes = [vertexes[24], vertexes[25]];
-  // paths[32].vertexes = [vertexes[25], vertexes[26]];
-  // paths[33].vertexes = [vertexes[16], vertexes[27]];
-  // paths[34].vertexes = [vertexes[18], vertexes[29]];
-  // paths[35].vertexes = [vertexes[20], vertexes[31]];
-  // paths[36].vertexes = [vertexes[22], vertexes[33]];
-  // paths[37].vertexes = [vertexes[24], vertexes[35]];
-  // paths[38].vertexes = [vertexes[26], vertexes[37]];
-  // paths[39].vertexes = [vertexes[27], vertexes[28]];
-  // paths[40].vertexes = [vertexes[28], vertexes[29]];
-  // paths[41].vertexes = [vertexes[29], vertexes[30]];
-  // paths[42].vertexes = [vertexes[30], vertexes[31]];
-  // paths[43].vertexes = [vertexes[31], vertexes[32]];
-  // paths[44].vertexes = [vertexes[32], vertexes[33]];
-  // paths[45].vertexes = [vertexes[33], vertexes[34]];
-  // paths[46].vertexes = [vertexes[34], vertexes[35]];
-  // paths[47].vertexes = [vertexes[35], vertexes[36]];
-  // paths[48].vertexes = [vertexes[36], vertexes[37]];
-  // paths[49].vertexes = [vertexes[28], vertexes[38]];
-  // paths[50].vertexes = [vertexes[30], vertexes[40]];
-  // paths[51].vertexes = [vertexes[32], vertexes[42]];
-  // paths[52].vertexes = [vertexes[34], vertexes[44]];
-  // paths[53].vertexes = [vertexes[36], vertexes[46]];
-  // paths[54].vertexes = [vertexes[38], vertexes[39]];
-  // paths[55].vertexes = [vertexes[39], vertexes[40]];
-  // paths[56].vertexes = [vertexes[40], vertexes[41]];
-  // paths[57].vertexes = [vertexes[41], vertexes[42]];
-  // paths[58].vertexes = [vertexes[42], vertexes[43]];
-  // paths[59].vertexes = [vertexes[43], vertexes[44]];
-  // paths[60].vertexes = [vertexes[44], vertexes[45]];
-  // paths[61].vertexes = [vertexes[45], vertexes[46]];
-  // paths[62].vertexes = [vertexes[39], vertexes[47]];
-  // paths[63].vertexes = [vertexes[41], vertexes[49]];
-  // paths[64].vertexes = [vertexes[43], vertexes[51]];
-  // paths[65].vertexes = [vertexes[45], vertexes[53]];
-  // paths[66].vertexes = [vertexes[47], vertexes[48]];
-  // paths[67].vertexes = [vertexes[48], vertexes[49]];
-  // paths[68].vertexes = [vertexes[49], vertexes[50]];
-  // paths[69].vertexes = [vertexes[50], vertexes[51]];
-  // paths[70].vertexes = [vertexes[51], vertexes[52]];
-  // paths[71].vertexes = [vertexes[52], vertexes[53]];
+  paths[5].vertexes = [vertexes[5], vertexes[6]];
+  paths[6].vertexes = [vertexes[0], vertexes[8]];
+  paths[7].vertexes = [vertexes[2], vertexes[10]];
+  paths[8].vertexes = [vertexes[4], vertexes[12]];
+  paths[9].vertexes = [vertexes[6], vertexes[14]];
+  paths[10].vertexes = [vertexes[7], vertexes[8]];
+  paths[11].vertexes = [vertexes[8], vertexes[9]];
+  paths[12].vertexes = [vertexes[9], vertexes[10]];
+  paths[13].vertexes = [vertexes[10], vertexes[11]];
+  paths[14].vertexes = [vertexes[11], vertexes[12]];
+  paths[15].vertexes = [vertexes[12], vertexes[13]];
+  paths[16].vertexes = [vertexes[13], vertexes[14]];
+  paths[17].vertexes = [vertexes[14], vertexes[15]];
+  paths[18].vertexes = [vertexes[7], vertexes[17]];
+  paths[19].vertexes = [vertexes[9], vertexes[19]];
+  paths[20].vertexes = [vertexes[11], vertexes[21]];
+  paths[21].vertexes = [vertexes[13], vertexes[23]];
+  paths[22].vertexes = [vertexes[15], vertexes[25]];
+  paths[23].vertexes = [vertexes[16], vertexes[17]];
+  paths[24].vertexes = [vertexes[17], vertexes[18]];
+  paths[25].vertexes = [vertexes[18], vertexes[19]];
+  paths[26].vertexes = [vertexes[19], vertexes[20]];
+  paths[27].vertexes = [vertexes[20], vertexes[21]];
+  paths[28].vertexes = [vertexes[21], vertexes[22]];
+  paths[29].vertexes = [vertexes[22], vertexes[23]];
+  paths[30].vertexes = [vertexes[23], vertexes[24]];
+  paths[31].vertexes = [vertexes[24], vertexes[25]];
+  paths[32].vertexes = [vertexes[25], vertexes[26]];
+  paths[33].vertexes = [vertexes[16], vertexes[27]];
+  paths[34].vertexes = [vertexes[18], vertexes[29]];
+  paths[35].vertexes = [vertexes[20], vertexes[31]];
+  paths[36].vertexes = [vertexes[22], vertexes[33]];
+  paths[37].vertexes = [vertexes[24], vertexes[35]];
+  paths[38].vertexes = [vertexes[26], vertexes[37]];
+  paths[39].vertexes = [vertexes[27], vertexes[28]];
+  paths[40].vertexes = [vertexes[28], vertexes[29]];
+  paths[41].vertexes = [vertexes[29], vertexes[30]];
+  paths[42].vertexes = [vertexes[30], vertexes[31]];
+  paths[43].vertexes = [vertexes[31], vertexes[32]];
+  paths[44].vertexes = [vertexes[32], vertexes[33]];
+  paths[45].vertexes = [vertexes[33], vertexes[34]];
+  paths[46].vertexes = [vertexes[34], vertexes[35]];
+  paths[47].vertexes = [vertexes[35], vertexes[36]];
+  paths[48].vertexes = [vertexes[36], vertexes[37]];
+  paths[49].vertexes = [vertexes[28], vertexes[38]];
+  paths[50].vertexes = [vertexes[30], vertexes[40]];
+  paths[51].vertexes = [vertexes[32], vertexes[42]];
+  paths[52].vertexes = [vertexes[34], vertexes[44]];
+  paths[53].vertexes = [vertexes[36], vertexes[46]];
+  paths[54].vertexes = [vertexes[38], vertexes[39]];
+  paths[55].vertexes = [vertexes[39], vertexes[40]];
+  paths[56].vertexes = [vertexes[40], vertexes[41]];
+  paths[57].vertexes = [vertexes[41], vertexes[42]];
+  paths[58].vertexes = [vertexes[42], vertexes[43]];
+  paths[59].vertexes = [vertexes[43], vertexes[44]];
+  paths[60].vertexes = [vertexes[44], vertexes[45]];
+  paths[61].vertexes = [vertexes[45], vertexes[46]];
+  paths[62].vertexes = [vertexes[39], vertexes[47]];
+  paths[63].vertexes = [vertexes[41], vertexes[49]];
+  paths[64].vertexes = [vertexes[43], vertexes[51]];
+  paths[65].vertexes = [vertexes[45], vertexes[53]];
+  paths[66].vertexes = [vertexes[47], vertexes[48]];
+  paths[67].vertexes = [vertexes[48], vertexes[49]];
+  paths[68].vertexes = [vertexes[49], vertexes[50]];
+  paths[69].vertexes = [vertexes[50], vertexes[51]];
+  paths[70].vertexes = [vertexes[51], vertexes[52]];
+  paths[71].vertexes = [vertexes[52], vertexes[53]];
 
   let numbers = [5, 2, 6, 3, 8, 10, 9, 12, 11, 4, 8, 10, 9, 4, 5, 6, 3, 11];
   let numberHexOrder = [0, 3, 7, 12, 16, 17, 18, 15, 11, 6, 2, 1, 4, 8, 13, 14, 10, 5, 9];
@@ -397,4 +437,30 @@ const setupBoard = (hexes, vertexes, paths, document) => {
   }
 }
 
-export { Vertex, Path, Hex, setupBoard }
+let rand = Math.floor(Math.random() * startPortIndices.length);
+for (let i = 0; i < rand; i++) {
+  portTypes.unshift(portTypes.pop());
+}
+
+const shuffleCards = () => {
+  let cards = ["Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Road Building", "Road Building", "Year of Plenty", "Year of Plenty", "Monopoly", "Monopoly", "Market", "University", "Great hall", "Chapel", "Library"];
+
+  var currentIndex = cards.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = cards[currentIndex];
+    cards[currentIndex] = cards[randomIndex];
+    cards[randomIndex] = temporaryValue;
+  }
+
+  return cards;
+}
+
+export { Vertex, Path, Hex, Player, setupBoard, shuffleCards }

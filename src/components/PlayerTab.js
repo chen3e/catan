@@ -21,7 +21,9 @@ const PlayerTab = (props) => {
         <button id="endTurn" onClick={props.nextPlayer} disabled={ props.turnStage == "TRADE/BUILD" ? false : true }>End turn</button>
         <button onClick={props.openHelpModal}>Help</button>
         <button id="tradeBank" onClick={props.openTradeBankModal}>Trade with bank</button>
-        <button id="tradePlayers">Trade with other players</button>
+        <button id="tradePlayers" onClick={props.openTradePlayerModal}>Trade with other players</button>
+        <button id="buyCard" onClick={props.buyCard}>Buy a development card</button>
+        <button id="useDevelopmentCards" onClick={props.openDevelopmentCardsModal}>Use development cards</button>
       </div>
     </div>
   )
