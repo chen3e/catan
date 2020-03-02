@@ -28,11 +28,11 @@ const Board = () => {
   const [showPlayerModal, setShowPlayerModal] = useState(true); //////
   const [helpText, setHelpText] = useState("");
   const [whoseTurn, setWhoseTurn] = useState("");
-  const [setupPhase, setSetupPhase] = useState(false);
+  const [setupPhase, setSetupPhase] = useState(true);
   const [setupPhaseRound, setSetupPhaseRound] = useState(1);
   const [setupRoadOrSettlement, setSetupRoadOrSettlement] = useState("settlement");
   const [lastSettlement, setLastSettlement] = useState();
-  const [turnStage, setTurnStage] = useState("ROLL");
+  const [turnStage, setTurnStage] = useState("SETUP");
   const [rollDisplay, setRollDisplay] = useState();
   const [movingRobber, setMovingRobber] = useState(false);
   const [robbedPlayers, setRobbedPlayers] = useState([]);
@@ -68,33 +68,33 @@ const Board = () => {
   // Set up the board- add resources, connections between hex/path/vertex
   useEffect(() => {
     setupBoard(hexes, vertexes, paths, document);
-    let player1 = new Player("player1", 1); //////
-    player1.brick = 50;
-    player1.lumber = 50;
-    player1.sheep = 50;
-    player1.wheat = 50;
-    player1.ore = 50;
-    player1.purchased_cards = ["Road Building", "Road Building", "Road Building", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Road Building", "Road Building", "Year of Plenty", "Year of Plenty", "Monopoly", "Monopoly"]
-    let player2 = new Player("player2", 2); //////
-    player2.lumber = 15;
-    player2.ore = 3;
-    player2.brick = 15;
-    player2.sheep = 3;
-    player2.wheat = 3;
-    player2.purchased_cards = ["Road Building", "Road Building", "Road Building", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Road Building", "Road Building", "Year of Plenty", "Year of Plenty", "Monopoly", "Monopoly"]
-    let player3 = new Player("player3", 3); //////
-    player3.lumber = 15;
-    player3.ore = 3;
-    player3.brick = 15;
-    player3.sheep = 3;
-    player3.wheat = 3;
-    let player4 = new Player("player4", 4); //////
-    player4.lumber = 4;
-    player4.ore = 3;
-    player4.brick = 6;
+    // let player1 = new Player("player1", 1); //////
+    // player1.brick = 50;
+    // player1.lumber = 50;
+    // player1.sheep = 50;
+    // player1.wheat = 50;
+    // player1.ore = 50;
+    // player1.purchased_cards = ["Road Building", "Road Building", "Road Building", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Road Building", "Road Building", "Year of Plenty", "Year of Plenty", "Monopoly", "Monopoly"]
+    // let player2 = new Player("player2", 2); //////
+    // player2.lumber = 15;
+    // player2.ore = 3;
+    // player2.brick = 15;
+    // player2.sheep = 3;
+    // player2.wheat = 3;
+    // player2.purchased_cards = ["Road Building", "Road Building", "Road Building", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Road Building", "Road Building", "Year of Plenty", "Year of Plenty", "Monopoly", "Monopoly"]
+    // let player3 = new Player("player3", 3); //////
+    // player3.lumber = 15;
+    // player3.ore = 3;
+    // player3.brick = 15;
+    // player3.sheep = 3;
+    // player3.wheat = 3;
+    // let player4 = new Player("player4", 4); //////
+    // player4.lumber = 4;
+    // player4.ore = 3;
+    // player4.brick = 6;
 
-    setPlayers([player1, player2]); //////
-    setWhoseTurn(player1); //////
+    // setPlayers([player1, player2]); //////
+    // setWhoseTurn(player1); //////
   }, [])
 
   // Transition to next player- simply next player in array, or previous if in second round of setup
@@ -168,7 +168,8 @@ const Board = () => {
           setSetupPhase(false);
           setLastSettlement(null);
           setTurnStage("ROLL");
-          setHelpText("The game has started- roll the dice!")
+          alert("The game has started- now roll the dice!");
+          setHelpText("The game has started- roll the dice!");
         }
         else {
           nextPlayer();
